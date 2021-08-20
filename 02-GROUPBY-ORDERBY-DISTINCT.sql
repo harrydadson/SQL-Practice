@@ -67,3 +67,55 @@ WHERE dayofweek = 7
 GROUP BY tailnum
 ORDER BY count DESC
 LIMIT 5;
+
+-- order of execution by SQL statement
+SELECT origin, COUNT(*)  -- 4
+FROM flight_delays       -- 1
+WHERE depdelay > 100     -- 2
+GROUP BY origin          -- 3
+ORDER BY origin          -- 5
+LIMIT 5;                 -- 6
+
+-- SQL JOINS
+SELECT t.tophit, t.play, p.artist, p.song
+FROM tutorial.toplist t
+JOIN tutorial.playlist p
+ON t.tophit = p.song
+;
+
+SELECT t.tophit, t.play, p.artist, p.song
+FROM tutorial.toplist t
+LEFT JOIN tutorial.playlist p
+ON t.tophit = p.song
+;
+
+SELECT t.tophit, t.play, p.artist, p.song
+FROM tutorial.toplist t
+RIGHT JOIN tutorial.playlist p
+ON t.tophit = p.song
+;
+
+SELECT t.tophit, t.play, p.artist, p.song
+FROM tutorial.toplist t
+FULL JOIN tutorial.playlist p
+ON t.tophit = p.song
+;
+
+-- How many plays does each artist have in total?
+SELECT p.artist,
+SUM(t.play)
+FROM playlist p
+FULL JOIN toplist t
+ON p.song = t.tophit
+GROUP BY artist;
+
+-- Print the top 5 ABBA songs ordered by number of plays!
+SELECT
+  p.artist,
+  p.song,
+  t.play
+FROM playlist p
+FULL JOIN toplist t
+  ON p.song = t.tophit
+WHERE p.artist = 'ABBA'
+ORDER BY t.play DESC;
